@@ -1,0 +1,6 @@
+@WL.Server_HostAddress = http://localhost:5225
+
+GET {{WL.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:57174",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "D:\\WebLearn\\WL.Server\\..\\wl.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}
