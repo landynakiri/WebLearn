@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import TicTacToe from './TicTacToe.tsx'
+import CounterTest from './CounterTest.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <TicTacToe />
+        <CounterTest />
   </StrictMode>,
 )
