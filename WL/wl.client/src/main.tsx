@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import PracticeUseContext from './PracticeUseContext.tsx'
+import UseStateTest from './UseStateTest.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <PracticeUseContext />
+        <UseStateTest />
   </StrictMode>,
 )

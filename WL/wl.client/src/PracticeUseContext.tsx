@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
 type Theme = "light" | "dark" | "system";
 const ThemeContext = createContext<Theme>("system");
