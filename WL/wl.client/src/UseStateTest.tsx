@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+//useState update®t²§
 export default function Counter() {
     const [number, setNumber] = useState(0);
 
