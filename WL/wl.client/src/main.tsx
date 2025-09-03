@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import UseStateTest from './UseStateTest.tsx'
+import UpdateObjectTest from './UpdateObjectTest.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <UseStateTest />
+        <UpdateObjectTest />
   </StrictMode>,
 )
