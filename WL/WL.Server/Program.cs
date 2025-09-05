@@ -35,6 +35,8 @@ namespace WL.Server
 
             app.MapFallbackToFile("/index.html");
 
+            app.MapGet("/hello", () => "Hello World!");
+
             app.Run();
         }
     }
