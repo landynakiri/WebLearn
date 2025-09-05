@@ -1,6 +1,32 @@
-@WL.Server_HostAddress = http://localhost:5225
+@WL.Server_HostAddress = https://localhost:44397
 
 GET {{WL.Server_HostAddress}}/weatherforecast/
 Accept: application/json
 
+###
+
+POST {{WL.Server_HostAddress}}/todoitems
+Content-Type: application/json
+
+{
+  "name":"walk dog",
+  "isComplete":true
+}
+###
+
+GET {{WL.Server_HostAddress}}/todoitems
+
+###
+
+GET {{WL.Server_HostAddress}}/todoitems/1
+
+###
+
+PUT {{WL.Server_HostAddress}}/todoitems/1
+Content-Type: application/json
+{
+  "id":1,
+  "name":"walk dog",
+  "isComplete":true
+}
 ###
