@@ -30,3 +30,7 @@ Content-Type: application/json
   "isComplete":true
 }
 ###
+
+DELETE {{WL.Server_HostAddress}}/todoitems/1
+
+###
