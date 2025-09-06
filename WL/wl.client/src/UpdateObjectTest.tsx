@@ -189,9 +189,17 @@ import { useImmer } from 'use-immer';
 //}
 
 
+interface Person {
+    name: string;
+    artwork: {
+        title: string,
+        city: string,
+        image: string
+    }
+}
 
 export default function Form() {
-    const [person, updatePerson] = useImmer({
+    const [person, updatePerson] = useImmer<Person>({
         name: 'Niki de Saint Phalle',
         artwork: {
             title: 'Blue Nana',
