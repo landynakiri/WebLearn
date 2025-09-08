@@ -15,9 +15,17 @@ namespace WL.Server.Controllers
         {
             _context = context;
         }
+                
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TodoItemDTO>>> GetTodoItems()
+        {
+            return await _context.TodoItems
+                .Select(x => ItemToDTO(x))
+                .ToListAsync();
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
+        public async Task<ActionResult<TodoItemDTO>> GetTodoItem(int id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
 
@@ -26,12 +34,18 @@ namespace WL.Server.Controllers
                 return NotFound();
             }
 
-            return todoItem;
+            return ItemToDTO(todoItem) ;
         }
 
         [HttpPost]
-        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem todoItem)
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItemDTO todoDTO)
         {
+            var todoItem = new TodoItem
+            {
+                IsComplete = todoDTO.IsComplete,
+                Name = todoDTO.Name
+            };
+
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
@@ -40,29 +54,29 @@ namespace WL.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem(int id, TodoItemDTO todoDTO)
         {
-            if (id != todoItem.Id)
+            if (id != todoDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(todoItem).State = EntityState.Modified;
+            var todoItem = await _context.TodoItems.FindAsync(id);
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            todoItem.Name = todoDTO.Name;
+            todoItem.IsComplete = todoDTO.IsComplete;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
             {
-                if (!TodoItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -87,5 +101,13 @@ namespace WL.Server.Controllers
 
             return NoContent();
         }
+
+        private static TodoItemDTO ItemToDTO(TodoItem todoItem) =>
+       new TodoItemDTO
+       {
+           Id = todoItem.Id,
+           Name = todoItem.Name,
+           IsComplete = todoItem.IsComplete
+       };
     }
 }
