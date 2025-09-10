@@ -4,3 +4,9 @@
 /WL/.vs
 /WL/wl.client/.vite
 *.user
+
+/Bank/Bank.Server/obj
+/Bank/Bank.Server/bin
+/Bank/bank.client/obj
+/Bank/.vs
+/Bank/bank.client/.vite
