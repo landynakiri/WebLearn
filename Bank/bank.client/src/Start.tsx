@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Login from './Login';
-import { login } from './services/authService';
+import { login, registerAccount } from './services/authService';
 import RegisterPage from './RegisterPage';
 
 function Start() {
@@ -16,7 +16,13 @@ function Start() {
     }
 
     async function handleRegister(username: string, password: string) {
-        alert("註冊Test");
+        const errMsg = await registerAccount(username, password);
+        console.log(import.meta.env.VITE_SOME_KEY) 
+        if (errMsg) {
+            alert(errMsg);
+        } else {
+            alert("註冊成功");
+        }
     }
 
     return (
