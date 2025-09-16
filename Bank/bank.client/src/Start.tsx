@@ -1,17 +1,28 @@
 import { useState } from 'react';
-import Login from './Login';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import Login from './uis/user/Login';
 import { getWeatherForecast, login, registerAccount } from './services/authService';
-import RegisterPage from './RegisterPage';
+import RegisterPage from './uis/admin/RegisterPage';
+import UserHome from './uis/user/UserHome';
 
-function Start() {
+export default function Start() {
     const [isRegisterPage, setIsRegisterPage] = useState(false);
+    const navigate = useNavigate();
 
     async function handleLogin(username: string, password: string) {
-        const errMsg = await login(username, password);
-        if (errMsg) {
-            alert(errMsg);
+
+        const result = await login(username, password);
+        if (!result.success) {
+            alert(result.error);
         } else {
-            alert("登入成功");
+            localStorage.setItem('token', result.data.token);
+
+            // 根據角色跳轉
+            if (result.data.role === 'Admin') {
+                navigate('/admin');
+            } else {
+                navigate('/UserHome');
+            }
         }
     }
 
@@ -42,5 +53,3 @@ function Start() {
         </div>
     );
 }
-
-export default Start;

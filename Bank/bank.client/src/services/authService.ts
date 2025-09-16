@@ -1,4 +1,13 @@
-export async function login(email: string, password: string): Promise<string | null> {
+interface LoginResp {
+    token: string;
+    role: 'Admin' | 'User';
+}
+
+type LoginResult =
+    | { success: true; data: LoginResp }
+    | { success: false; error: string };
+
+export async function login(email: string, password: string): Promise<LoginResult> {
     try {
         const response = await fetch('/login', {
             method: 'POST',
@@ -6,13 +15,14 @@ export async function login(email: string, password: string): Promise<string | n
             body: JSON.stringify({ email, password }),
         });
         if (response.ok) {
-            return null; // 登入成功
+            const msg = await response.json(); // 登入成功
+            return { success: true, data: msg as LoginResp }
         } else {
             const msg = await response.text();
-            return msg || '登入失敗';
+            return { success: false, error: msg || '登入失敗' }  ;
         }
     } catch {
-        return '伺服器錯誤，請稍後再試';
+        return { success: false, error: '伺服器錯誤，請稍後再試' };
     }
 }
 
