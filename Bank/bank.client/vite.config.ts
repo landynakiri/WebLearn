@@ -50,6 +50,11 @@ export default defineConfig({
             '^/weatherforecast': {
                 target,
                 secure: false
+            },
+            '^/register': {
+                target,
+                secure: false,
+                changeOrigin: true,
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '50633'),

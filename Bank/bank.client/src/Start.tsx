@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Login from './Login';
-import { login, registerAccount } from './services/authService';
+import { getWeatherForecast, login, registerAccount } from './services/authService';
 import RegisterPage from './RegisterPage';
 
 function Start() {
@@ -25,11 +25,21 @@ function Start() {
         }
     }
 
+    async function handleGetWeather() {
+         const result = await getWeatherForecast();
+         if (typeof result === 'string') {
+             alert(result); // 顯示錯誤訊息
+         } else {
+             alert(JSON.stringify(result, null, 2)); // 顯示天氣資料
+         }
+    }
+
     return (
         <div>
             <h1>Bank</h1>
             <button onClick={() => setIsRegisterPage(!isRegisterPage)}>{!isRegisterPage ?"註冊":"登入"}</button>
             {isRegisterPage ? <RegisterPage onRegister={handleRegister} /> : <Login onLogin={handleLogin} />}            
+            <button onClick={() => handleGetWeather()}></button>
         </div>
     );
 }

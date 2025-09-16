@@ -14,7 +14,7 @@ namespace Bank.Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            // -------------------- Identity ≥]©w∞œ∂Ù --------------------
+            // -------------------- Identity Ë®≠ÂÆöÂçÄÂ°ä --------------------
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseInMemoryDatabase("AppDb"));
             builder.Services.AddIdentityApiEndpoints<IdentityUser>()
@@ -28,7 +28,7 @@ namespace Bank.Server
 
             var app = builder.Build();
 
-            // -------------------- Identity ∏Ù•— --------------------
+            // -------------------- Identity Ë∑ØÁî± --------------------
             app.MapIdentityApi<IdentityUser>();
             app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
                 [FromBody] object empty) =>
