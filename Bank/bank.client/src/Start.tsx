@@ -17,7 +17,6 @@ function Start() {
 
     async function handleRegister(username: string, password: string) {
         const errMsg = await registerAccount(username, password);
-        console.log(import.meta.env.VITE_SOME_KEY) 
         if (errMsg) {
             alert(errMsg);
         } else {
@@ -39,7 +38,7 @@ function Start() {
             <h1>Bank</h1>
             <button onClick={() => setIsRegisterPage(!isRegisterPage)}>{!isRegisterPage ?"註冊":"登入"}</button>
             {isRegisterPage ? <RegisterPage onRegister={handleRegister} /> : <Login onLogin={handleLogin} />}            
-            <button onClick={() => handleGetWeather()}></button>
+            <button onClick={() => handleGetWeather()}>GetWeatherTestBtn</button>
         </div>
     );
 }

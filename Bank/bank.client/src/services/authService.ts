@@ -34,7 +34,7 @@ export async function registerAccount(email: string, password: string): Promise<
     }
 }
 
-export async function getWeatherForecast(): Promise<any[] | string> {
+export async function getWeatherForecast(): Promise<string> {
     try {
         const response = await fetch('/WeatherForecast', {
             method: 'GET',
