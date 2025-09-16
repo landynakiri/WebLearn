@@ -55,6 +55,11 @@ export default defineConfig({
                 target,
                 secure: false,
                 changeOrigin: true,
+            },
+            '^/login': {
+                target,
+                secure: false,
+                changeOrigin: true,
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '50633'),
