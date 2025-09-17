@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Login from './uis/user/Login';
 import { getWeatherForecast, login, registerAccount } from './services/authService';
 import RegisterPage from './uis/admin/RegisterPage';
-import UserHome from './uis/user/UserHome';
 
 export default function Start() {
     const [isRegisterPage, setIsRegisterPage] = useState(false);
