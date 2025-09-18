@@ -14,9 +14,21 @@ namespace Bank.Server
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
+
             // Add services to the container.
             // -------------------- Identity 設定區塊 --------------------
+            //if (Environment.IsDevelopment())
+            //{
+            //    // 開發環境
+            //}
+            //else if (Environment.IsStaging())
+            //{
+            //    // 測試/預備環境
+            //}
+            //else if (Environment.IsProduction())
+            //{
+            //    // 生產環境
+            //}
             //builder.Services.AddDbContext<ApplicationDbContext>(options => 
             //    options.UseInMemoryDatabase("AppDb"));
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
