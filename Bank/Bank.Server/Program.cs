@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Bank.Server
 {
@@ -12,11 +14,13 @@ namespace Bank.Server
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            
             // Add services to the container.
             // -------------------- Identity 設定區塊 --------------------
-            builder.Services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseInMemoryDatabase("AppDb"));
+            //builder.Services.AddDbContext<ApplicationDbContext>(options => 
+            //    options.UseInMemoryDatabase("AppDb"));
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddIdentityApiEndpoints<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddAuthorization();
@@ -62,7 +66,28 @@ namespace Bank.Server
 
             app.MapFallbackToFile("/index.html");
 
+            CreateDbIfNotExists(app);
+
             app.Run();
+        }
+
+        private static void CreateDbIfNotExists(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    context.Database.EnsureCreated();
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred creating the DB.");
+                }
+            }
         }
     }
 }
