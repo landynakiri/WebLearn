@@ -1,4 +1,5 @@
 
+using Bank.Server.Data;
 using Bank.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace Bank.Server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +31,12 @@ namespace Bank.Server
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 }
             });
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = builder.Environment.IsProduction() ? true : false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
@@ -43,7 +47,7 @@ namespace Bank.Server
             var app = builder.Build();
 
             // -------------------- Identity 路由 --------------------
-            app.MapIdentityApi<IdentityUser>();
+            //app.MapIdentityApi<IdentityUser>();
             app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
                 [FromBody] object empty) =>
                 {
@@ -78,7 +82,10 @@ namespace Bank.Server
 
             CreateDbIfNotExists(app);
 
-            app.Run();
+            using var scope = app.Services.CreateScope();
+            await SeedData.Initialize(scope.ServiceProvider);
+
+            await app.RunAsync();
         }
 
         private static void CreateDbIfNotExists(IHost host)
