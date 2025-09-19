@@ -1,11 +1,8 @@
 
 using Bank.Server.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 namespace Bank.Server
 {
@@ -17,22 +14,23 @@ namespace Bank.Server
 
             // Add services to the container.
             // -------------------- Identity 設定區塊 --------------------
-            //if (Environment.IsDevelopment())
-            //{
-            //    // 開發環境
-            //}
-            //else if (Environment.IsStaging())
-            //{
-            //    // 測試/預備環境
-            //}
-            //else if (Environment.IsProduction())
-            //{
-            //    // 生產環境
-            //}
-            //builder.Services.AddDbContext<ApplicationDbContext>(options => 
-            //    options.UseInMemoryDatabase("AppDb"));
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            {
+                if (builder.Environment.IsDevelopment())
+                {
+                    options.UseInMemoryDatabase("AppDb");
+                }
+                else if (builder.Environment.IsStaging())
+                {
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                }
+                else if (builder.Environment.IsProduction())
+                {
+                    //記得改用真正的資料庫連接
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                }
+            });
+
             builder.Services.AddIdentityApiEndpoints<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddAuthorization();
