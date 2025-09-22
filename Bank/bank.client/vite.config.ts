@@ -51,12 +51,12 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/register': {
+            '^/api/Users/register': {
                 target,
                 secure: false,
                 changeOrigin: true,
             },
-            '^/login': {
+            '^/api/Users/login': {
                 target,
                 secure: false,
                 changeOrigin: true,

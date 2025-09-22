@@ -9,7 +9,7 @@ type LoginResult =
 
 export async function login(email: string, password: string): Promise<LoginResult> {
     try {
-        const response = await fetch('/login', {
+        const response = await fetch('/api/Users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -28,7 +28,7 @@ export async function login(email: string, password: string): Promise<LoginResul
 
 export async function registerAccount(email: string, password: string): Promise<string | null> {
     try {
-        const response = await fetch('/register', {
+        const response = await fetch('/api/Users/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
