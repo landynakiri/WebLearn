@@ -23,9 +23,10 @@ namespace Bank.Server.Data
             var adminEmail = "admin@example.com";
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
-                var admin = new IdentityUser { UserName = adminEmail, Email = adminEmail };
+                var admin = new ApplicationUser { UserName = adminEmail, Email = adminEmail };
                 await userManager.CreateAsync(admin, "Admin123!");
                 await userManager.AddToRoleAsync(admin, "Admin");
+                await userManager.UpdateAsync(admin);
             }
         }
     }

@@ -4,6 +4,7 @@ import './index.css'
 import Start from './Start.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import UserHome from './uis/user/UserHome.tsx'
+import AdminHome from './uis/admin/AdminHome.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -11,6 +12,7 @@ createRoot(document.getElementById('root')!).render(
             <Routes>
                 <Route path="/" element={<Start />} />
                 <Route path="/UserHome" element={<UserHome />} />
+                <Route path="/AdminHome" element={<AdminHome />} />
             </Routes>            
         </BrowserRouter>
   </StrictMode>,

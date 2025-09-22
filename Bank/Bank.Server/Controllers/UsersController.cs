@@ -1,4 +1,4 @@
-using Bank.Server.Models;
+using Bank.Server.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -27,7 +27,7 @@ namespace Bank.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new IdentityUser {UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
@@ -56,7 +56,13 @@ namespace Bank.Server.Controllers
             if (!passwordValid)
                 return Unauthorized("無效的帳號或密碼");
 
-            // 這裡可以根據需求產生 JWT 或其他登入回應
+            if (user is ApplicationUser applicationUser)
+            {
+                applicationUser.LastLogin = DateTime.UtcNow;
+            }
+
+            await userManager.UpdateAsync(user);
+
             return Ok(new { Message = "登入成功" });
         }
 
@@ -71,6 +77,30 @@ namespace Bank.Server.Controllers
             await userManager.AddToRolesAsync(user, roles);
 
             return Ok();
-        }       
+        }
+
+        [HttpGet("GetUsers")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = userManager.Users.ToList();
+
+            var result = new List<object>();
+            foreach (var user in users)
+            {
+                var applicationUser = user as ApplicationUser;
+                var roles = await userManager.GetRolesAsync(user);
+                result.Add(new
+                {
+                    user.Id,
+                    user.UserName,
+                    user.Email,
+                    Roles = roles,
+                    applicationUser?.CreatedAt,
+                    applicationUser?.LastLogin
+                });
+            }
+
+            return Ok(result);
+        }
     }
 }

@@ -18,7 +18,7 @@ export default function Start() {
 
             // 根據角色跳轉
             if (result.data.role === 'Admin') {
-                navigate('/admin');
+                navigate('/AdminHome');
             } else {
                 navigate('/UserHome');
             }
