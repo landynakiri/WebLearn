@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Login from './uis/user/Login';
-import { getWeatherForecast, login, registerAccount } from './services/authService';
+import { login, registerAccount } from './services/authService';
 import RegisterPage from './uis/admin/RegisterPage';
+import { weatherForecastApi } from './services/openApiGeneratorServices';
+
 
 export default function Start() {
     const [isRegisterPage, setIsRegisterPage] = useState(false);
@@ -34,13 +36,9 @@ export default function Start() {
         }
     }
 
-    async function handleGetWeather() {
-         const result = await getWeatherForecast();
-         if (typeof result === 'string') {
-             alert(result); // 顯示錯誤訊息
-         } else {
-             alert(JSON.stringify(result, null, 2)); // 顯示天氣資料
-         }
+    async function handleGetWeather() {   
+        const result = await weatherForecastApi.getWeatherForecast();
+        alert(result); // 顯示錯誤訊息
     }
 
     return (
