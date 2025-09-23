@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/UsersApi.ts
+apis/WeatherForecastApi.ts
+apis/index.ts
+index.ts
+models/LoginRequest.ts
+models/RegisterRequest.ts
+models/WeatherForecast.ts
+models/index.ts
+runtime.ts
