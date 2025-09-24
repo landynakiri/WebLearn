@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Login from './uis/user/Login';
-import { login, registerAccount } from './services/authService';
 import RegisterPage from './uis/admin/RegisterPage';
-import { weatherForecastApi } from './services/openApiGeneratorServices';
+import { weatherForecastApi, userApi } from './services/openApiGeneratorServices';
 
 
 export default function Start() {
@@ -11,33 +10,34 @@ export default function Start() {
     const navigate = useNavigate();
 
     async function handleLogin(username: string, password: string) {
+        try {
+            const result = await userApi.usersLogin({ loginRequest: { email: username, password: password } });
+            const isAdmin = result.includes('Admin');
 
-        const result = await login(username, password);
-        if (!result.success) {
-            alert(result.error);
-        } else {
-            localStorage.setItem('token', result.data.token);
+            //localStorage.setItem('token', result.data.token);
 
-            // 根據角色跳轉
-            if (result.data.role === 'Admin') {
+            if (isAdmin) {
                 navigate('/AdminHome');
             } else {
                 navigate('/UserHome');
             }
+        } catch {
+            alert("登入失敗");
         }
+        
     }
 
     async function handleRegister(username: string, password: string) {
-        const errMsg = await registerAccount(username, password);
-        if (errMsg) {
-            alert(errMsg);
-        } else {
+        try {
+            await userApi.usersRegister({ registerRequest: { email: username, password: password } });
             alert("註冊成功");
+        } catch (error) {
+            alert("註冊失敗：" + (error instanceof Error ? error.message : String(error)));
         }
     }
 
     async function handleGetWeather() {   
-        const result = await weatherForecastApi.getWeatherForecast();
+        const result = await weatherForecastApi.weatherForecastGet();
         alert(result); // 顯示錯誤訊息
     }
 

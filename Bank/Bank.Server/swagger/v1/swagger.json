@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Bank.Server",
+    "title": "Bank.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "version": "1.0"
   },
   "paths": {
@@ -10,6 +10,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_Register",
         "requestBody": {
           "content": {
             "application/json": {
@@ -41,6 +42,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_Login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -62,7 +64,33 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -72,6 +100,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_SetRoles",
         "parameters": [
           {
             "name": "userId",
@@ -122,6 +151,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetUsers",
         "responses": {
           "200": {
             "description": "OK"
@@ -134,7 +164,7 @@
         "tags": [
           "WeatherForecast"
         ],
-        "operationId": "GetWeatherForecast",
+        "operationId": "WeatherForecast_Get",
         "responses": {
           "200": {
             "description": "OK",

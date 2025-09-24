@@ -43,7 +43,7 @@ namespace Bank.Server.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest model)
+        public async Task<ActionResult<IList<string>>> Login([FromBody] LoginRequest model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -63,7 +63,9 @@ namespace Bank.Server.Controllers
 
             await userManager.UpdateAsync(user);
 
-            return Ok(new { Message = "登入成功" });
+            var currentRoles = await userManager.GetRolesAsync(user);
+
+            return Ok(currentRoles);
         }
 
         [HttpPost("{userId}/roles")]
@@ -79,6 +81,7 @@ namespace Bank.Server.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
