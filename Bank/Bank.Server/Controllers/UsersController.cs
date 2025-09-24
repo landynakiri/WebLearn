@@ -1,4 +1,6 @@
 using Bank.Server.Data;
+using Bank.Server.Models;
+using Bank.Server.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -43,7 +45,7 @@ namespace Bank.Server.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<IList<string>>> Login([FromBody] LoginRequest model)
+        public async Task<ActionResult<LoginResp>> Login([FromBody] LoginRequest model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -65,7 +67,13 @@ namespace Bank.Server.Controllers
 
             var currentRoles = await userManager.GetRolesAsync(user);
 
-            return Ok(currentRoles);
+            string token = JWTUtility.GenerateToken(user, currentRoles);
+
+            return Ok( new LoginResp
+            {
+                Token = token,
+                Roles = currentRoles
+            });
         }
 
         [HttpPost("{userId}/roles")]
@@ -81,25 +89,24 @@ namespace Bank.Server.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
         [HttpGet("GetUsers")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<IList<GetUserResp>>> GetUsers()
         {
             var users = userManager.Users.ToList();
 
-            var result = new List<object>();
+            var result = new List<GetUserResp>();
             foreach (var user in users)
             {
                 var applicationUser = user as ApplicationUser;
                 var roles = await userManager.GetRolesAsync(user);
-                result.Add(new
+                result.Add(new GetUserResp
                 {
-                    user.Id,
-                    user.UserName,
-                    user.Email,
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
                     Roles = roles,
-                    applicationUser?.CreatedAt,
-                    applicationUser?.LastLogin
+                    CreatedAt = applicationUser?.CreatedAt,
+                    LastLogin = applicationUser?.LastLogin
                 });
             }
 

@@ -16,11 +16,14 @@
 import * as runtime from '../runtime';
 import type {
   LoginRequest,
+  LoginResp,
   RegisterRequest,
 } from '../models/index';
 import {
     LoginRequestFromJSON,
     LoginRequestToJSON,
+    LoginRespFromJSON,
+    LoginRespToJSON,
     RegisterRequestFromJSON,
     RegisterRequestToJSON,
 } from '../models/index';
@@ -45,7 +48,7 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async usersGetUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async usersGetUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<object>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -60,18 +63,19 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
      */
-    async usersGetUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.usersGetUsersRaw(initOverrides);
+    async usersGetUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<object>> {
+        const response = await this.usersGetUsersRaw(initOverrides);
+        return await response.value();
     }
 
     /**
      */
-    async usersLoginRaw(requestParameters: UsersLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+    async usersLoginRaw(requestParameters: UsersLoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResp>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -89,12 +93,12 @@ export class UsersApi extends runtime.BaseAPI {
             body: LoginRequestToJSON(requestParameters['loginRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => LoginRespFromJSON(jsonValue));
     }
 
     /**
      */
-    async usersLogin(requestParameters: UsersLoginRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+    async usersLogin(requestParameters: UsersLoginRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResp> {
         const response = await this.usersLoginRaw(requestParameters, initOverrides);
         return await response.value();
     }

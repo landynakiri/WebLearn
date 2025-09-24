@@ -21,7 +21,7 @@ namespace Bank.Server.Utility
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("YourSuperSecretKey123")); // 請改成安全的 key
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("YourSuperSuperSecretKey1234567890")); // 請改成安全的 key
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

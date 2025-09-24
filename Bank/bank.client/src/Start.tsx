@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Login from './uis/user/Login';
 import RegisterPage from './uis/admin/RegisterPage';
-import { weatherForecastApi, userApi } from './services/openApiGeneratorServices';
+import { initApiConfig, getUserApi, getWeatherForecastApi } from './services/openApiGeneratorServices';
 
 
 export default function Start() {
@@ -11,10 +11,11 @@ export default function Start() {
 
     async function handleLogin(username: string, password: string) {
         try {
-            const result = await userApi.usersLogin({ loginRequest: { email: username, password: password } });
-            const isAdmin = result.includes('Admin');
+            const result = await getUserApi().usersLogin({ loginRequest: { email: username, password: password } });
+            const isAdmin = Array.isArray(result.roles) && result.roles.includes('Admin');
+            initApiConfig(result.token ?? "");
 
-            //localStorage.setItem('token', result.data.token);
+            localStorage.setItem('token', result.token ?? "");
 
             if (isAdmin) {
                 navigate('/AdminHome');
@@ -29,7 +30,7 @@ export default function Start() {
 
     async function handleRegister(username: string, password: string) {
         try {
-            await userApi.usersRegister({ registerRequest: { email: username, password: password } });
+            await getUserApi().usersRegister({ registerRequest: { email: username, password: password } });
             alert("註冊成功");
         } catch (error) {
             alert("註冊失敗：" + (error instanceof Error ? error.message : String(error)));
@@ -37,7 +38,7 @@ export default function Start() {
     }
 
     async function handleGetWeather() {   
-        const result = await weatherForecastApi.weatherForecastGet();
+        const result = await getWeatherForecastApi().weatherForecastGet();
         alert(result); // 顯示錯誤訊息
     }
 
