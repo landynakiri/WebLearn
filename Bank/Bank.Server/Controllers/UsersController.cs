@@ -1,6 +1,5 @@
 using Bank.Server.Data;
 using Bank.Server.Models;
-using Bank.Server.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -15,11 +14,13 @@ namespace Bank.Server.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
-        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.signInManager = signInManager;
         }
 
         [AllowAnonymous]
@@ -50,12 +51,12 @@ namespace Bank.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+            if (!result.Succeeded)
                 return Unauthorized("無效的帳號或密碼");
 
-            var passwordValid = await userManager.CheckPasswordAsync(user, model.Password);
-            if (!passwordValid)
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
                 return Unauthorized("無效的帳號或密碼");
 
             if (user is ApplicationUser applicationUser)
@@ -67,11 +68,8 @@ namespace Bank.Server.Controllers
 
             var currentRoles = await userManager.GetRolesAsync(user);
 
-            string token = JWTUtility.GenerateToken(user, currentRoles);
-
-            return Ok( new LoginResp
+            return Ok(new LoginResp
             {
-                Token = token,
                 Roles = currentRoles
             });
         }

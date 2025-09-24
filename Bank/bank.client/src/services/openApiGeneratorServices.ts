@@ -13,8 +13,8 @@ export function getUserApi() {
     return userApi;
 }
 
-export function initApiConfig(token: string) {
-    config = new Configuration({ basePath: window.location.origin, accessToken: token });
+export function initApiConfig() {
+    config = new Configuration({basePath: window.location.origin});
     weatherForecastApi = new WeatherForecastApi(config);
     userApi = new UsersApi(config);
 }

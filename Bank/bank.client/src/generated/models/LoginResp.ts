@@ -21,12 +21,6 @@ import { mapValues } from '../runtime';
 export interface LoginResp {
     /**
      * 
-     * @type {string}
-     * @memberof LoginResp
-     */
-    token?: string | null;
-    /**
-     * 
      * @type {Array<string>}
      * @memberof LoginResp
      */
@@ -50,7 +44,6 @@ export function LoginRespFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'token': json['token'] == null ? undefined : json['token'],
         'roles': json['roles'] == null ? undefined : json['roles'],
     };
 }
@@ -66,7 +59,6 @@ export function LoginRespToJSONTyped(value?: LoginResp | null, ignoreDiscriminat
 
     return {
         
-        'token': value['token'],
         'roles': value['roles'],
     };
 }

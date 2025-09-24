@@ -6,6 +6,8 @@ import { initApiConfig, getUserApi, getWeatherForecastApi } from './services/ope
 
 
 export default function Start() {
+    initApiConfig();
+
     const [isRegisterPage, setIsRegisterPage] = useState(false);
     const navigate = useNavigate();
 
@@ -13,9 +15,6 @@ export default function Start() {
         try {
             const result = await getUserApi().usersLogin({ loginRequest: { email: username, password: password } });
             const isAdmin = Array.isArray(result.roles) && result.roles.includes('Admin');
-            initApiConfig(result.token ?? "");
-
-            localStorage.setItem('token', result.token ?? "");
 
             if (isAdmin) {
                 navigate('/AdminHome');

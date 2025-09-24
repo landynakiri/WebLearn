@@ -251,10 +251,6 @@
       "LoginResp": {
         "type": "object",
         "properties": {
-          "token": {
-            "type": "string",
-            "nullable": true
-          },
           "roles": {
             "type": "array",
             "items": {
