@@ -1,5 +1,6 @@
 using Bank.Server.Data;
 using Bank.Server.Models;
+using Bank.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -13,15 +14,13 @@ namespace Bank.Server.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly AuthService authService;
+        private readonly UserService userService;
 
-        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
+        public UsersController(AuthService authService, UserService userService)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            this.signInManager = signInManager;
+            this.authService = authService;
+            this.userService = userService;
         }
 
         [AllowAnonymous]
@@ -31,16 +30,10 @@ namespace Bank.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await authService.RegisterAsync(model);
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
-
-            if (await roleManager.RoleExistsAsync("User"))
-            {
-                await userManager.AddToRoleAsync(user, "User");
-            }
 
             return Ok();
         }
@@ -52,64 +45,33 @@ namespace Bank.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
-            if (!result.Succeeded)
+            var result = await authService.LoginAsync(model);
+            if (result == null)
                 return Unauthorized("無效的帳號或密碼");
-
-            var user = await userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return Unauthorized("無效的帳號或密碼");
-
-            if (user is ApplicationUser applicationUser)
-            {
-                applicationUser.LastLogin = DateTime.UtcNow;
-            }
-
-            await userManager.UpdateAsync(user);
-
-            var currentRoles = await userManager.GetRolesAsync(user);
-
-            return Ok(new LoginResp
-            {
-                Roles = currentRoles
-            });
+            else
+                return Ok(result);
         }
 
         [HttpPost("{userId}/roles")]
         public async Task<IActionResult> SetRoles(string userId, [FromBody] string[] roles)
         {
-            var user = await userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
+            bool result = await userService.SetRolesAsync(userId, roles);
 
-            var currentRoles = await userManager.GetRolesAsync(user);
-            await userManager.RemoveFromRolesAsync(user, currentRoles);
-            await userManager.AddToRolesAsync(user, roles);
-
-            return Ok();
+            if(!result)
+                return NotFound();
+            else
+                return Ok();
         }
 
         [HttpGet("GetUsers")]
         public async Task<ActionResult<IEnumerable<GetUserResp>>> GetUsers()
         {
-            var users = await userManager.Users.ToListAsync();
+            var result = await userService.GetUsers();
 
-            var result = new List<GetUserResp>();
-            foreach (var user in users)
-            {
-                var applicationUser = user as ApplicationUser;
-                var roles = await userManager.GetRolesAsync(user);
-                result.Add(new GetUserResp
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Roles = roles,
-                    CreatedAt = applicationUser?.CreatedAt,
-                    LastLogin = applicationUser?.LastLogin
-                });
-            }
-
-            return Ok(result);
+            if(result == null || !result.Any())
+                return NotFound();
+            else
+                return Ok(result);
         }
     }
 }

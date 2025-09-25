@@ -1,6 +1,7 @@
 
 using Bank.Server.Data;
 using Bank.Server.Models;
+using Bank.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,10 @@ namespace Bank.Server
                 options.SignIn.RequireConfirmedAccount = builder.Environment.IsProduction() ? true : false;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddAuthorization();
+
+            //Services
+            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<UserService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
