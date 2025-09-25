@@ -88,7 +88,7 @@ namespace Bank.Server.Controllers
         }
 
         [HttpGet("GetUsers")]
-        public async Task<ActionResult<IList<GetUserResp>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<GetUserResp>>> GetUsers()
         {
             var users = userManager.Users.ToList();
 
@@ -109,6 +109,14 @@ namespace Bank.Server.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("GetTest")]
+        public async Task<ActionResult<IList<string>>> GetTest()
+        {
+            
+
+            return Ok(new List<string> { "asdf"});
         }
     }
 }

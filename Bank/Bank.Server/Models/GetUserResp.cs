@@ -2,11 +2,11 @@ namespace Bank.Server.Models
 {
     public class GetUserResp
     {
-        public string Id;
-        public string UserName;
-        public string Email;
-        public IList<string> Roles;
-        public DateTime? CreatedAt;
-        public DateTime? LastLogin;
+        public required string Id { get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+        public IList<string>? Roles { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? LastLogin { get; set; }
     }
 }

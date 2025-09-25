@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  GetUserResp,
   LoginRequest,
   LoginResp,
   RegisterRequest,
 } from '../models/index';
 import {
+    GetUserRespFromJSON,
+    GetUserRespToJSON,
     LoginRequestFromJSON,
     LoginRequestToJSON,
     LoginRespFromJSON,
@@ -48,7 +51,34 @@ export class UsersApi extends runtime.BaseAPI {
 
     /**
      */
-    async usersGetUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<object>>> {
+    async usersGetTestRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<string>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/Users/GetTest`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async usersGetTest(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<string>> {
+        const response = await this.usersGetTestRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async usersGetUsersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<GetUserResp>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -63,12 +93,12 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(GetUserRespFromJSON));
     }
 
     /**
      */
-    async usersGetUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<object>> {
+    async usersGetUsers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<GetUserResp>> {
         const response = await this.usersGetUsersRaw(initOverrides);
         return await response.value();
     }
