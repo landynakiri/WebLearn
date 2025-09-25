@@ -6,6 +6,6 @@ namespace Bank.Server.Data
     {
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime? LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; } = DateTime.UtcNow;
     }
 }

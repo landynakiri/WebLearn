@@ -33,7 +33,7 @@ namespace Bank.Server
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = builder.Environment.IsProduction() ? true : false;
             }).AddEntityFrameworkStores<ApplicationDbContext>();

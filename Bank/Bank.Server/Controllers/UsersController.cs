@@ -12,11 +12,11 @@ namespace Bank.Server.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -114,9 +114,9 @@ namespace Bank.Server.Controllers
         [HttpGet("GetTest")]
         public async Task<ActionResult<IList<string>>> GetTest()
         {
-            
 
-            return Ok(new List<string> { "asdf"});
+
+            return Ok(new List<string> { "asdf" });
         }
     }
 }

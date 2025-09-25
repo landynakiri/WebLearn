@@ -8,7 +8,7 @@ namespace Bank.Server.Data
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var db = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
             // 1. 創建角色
