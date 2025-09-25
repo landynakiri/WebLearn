@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bank.Server.Controllers
 {
@@ -90,7 +91,7 @@ namespace Bank.Server.Controllers
         [HttpGet("GetUsers")]
         public async Task<ActionResult<IEnumerable<GetUserResp>>> GetUsers()
         {
-            var users = userManager.Users.ToList();
+            var users = await userManager.Users.ToListAsync();
 
             var result = new List<GetUserResp>();
             foreach (var user in users)
@@ -109,14 +110,6 @@ namespace Bank.Server.Controllers
             }
 
             return Ok(result);
-        }
-
-        [HttpGet("GetTest")]
-        public async Task<ActionResult<IList<string>>> GetTest()
-        {
-
-
-            return Ok(new List<string> { "asdf" });
         }
     }
 }
