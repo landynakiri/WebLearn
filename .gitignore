@@ -8,5 +8,7 @@
 /Bank/Bank.Server/obj
 /Bank/Bank.Server/bin
 /Bank/bank.client/obj
+/Bank/Bank.ServerTests/obj
+/Bank/Bank.ServerTests/bin
 /Bank/.vs
 /Bank/bank.client/.vite
