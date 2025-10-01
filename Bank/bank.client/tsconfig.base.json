@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "erasableSyntaxOnly": false,
+    "strict": true
+    // 其他共用設定可放這裡
+  }
+}
