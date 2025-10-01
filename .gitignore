@@ -12,3 +12,5 @@
 /Bank/Bank.ServerTests/bin
 /Bank/.vs
 /Bank/bank.client/.vite
+/Bank/obj
+/Bank/bin

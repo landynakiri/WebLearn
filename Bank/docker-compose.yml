@@ -1,0 +1,10 @@
+services:
+  bank.server:
+    image: ${DOCKER_REGISTRY-}bankserver
+    build:
+      context: .
+      dockerfile: Bank.Server/Dockerfile
+    ports:
+      - "5001:8081"
+
+
