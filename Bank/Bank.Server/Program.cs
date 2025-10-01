@@ -2,7 +2,6 @@
 using Bank.Server.Data;
 using Bank.Server.Models;
 using Bank.Server.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +28,7 @@ namespace Bank.Server
                 else if (builder.Environment.IsProduction())
                 {
                     //記得改用真正的資料庫連接
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                    options.UseInMemoryDatabase("AppDb");
                 }
             });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
