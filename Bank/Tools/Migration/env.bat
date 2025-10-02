@@ -1,0 +1,1 @@
+set "ASPNETCORE_ENVIRONMENT=Staging"
