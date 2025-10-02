@@ -1,5 +1,5 @@
-using Bank.Server.Data;
 using Bank.Server.Models;
+using Bank.Server.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 

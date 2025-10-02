@@ -14,6 +14,8 @@ namespace Bank.Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<TestDbContext>();
+
             // -------------------- Identity 設定區塊 --------------------
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {

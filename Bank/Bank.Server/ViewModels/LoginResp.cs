@@ -1,4 +1,4 @@
-namespace Bank.Server.Models
+namespace Bank.Server.ViewModels
 {
     public class LoginResp
     {
